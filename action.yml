@@ -1,0 +1,33 @@
+name: 'azure-nsg-temp-door'
+description: Add a rule to the NSG to allow access from the runner's IP
+inputs:
+  client-id:
+    description: 'Service principal client ID'
+    required: true
+  client-secret:
+    description: 'Service principal client secret'
+    required: true
+  tenant-id:
+    description: 'Tenant ID'
+    required: true
+  resource-group-name:
+    description: 'Resource group name'
+    required: true
+  nsg-name:
+    description: 'NSG name'
+    required: true
+  port:
+    description: 'Port number'
+    required: true
+runs:
+  using: 'docker'
+  image: Dockerfile
+  args:
+    - ${{ inputs.client-id }}
+    - ${{ inputs.client-secret }}
+    - ${{ inputs.tenant-id }}
+    - ${{ inputs.resource-group-name }}
+    - ${{ inputs.nsg-name }}
+    - ${{ inputs.port }}
+  entrypoint: '/open.sh'
+  post-entrypoint: '/close.sh'
